@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from seleniumwire import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 from lib.metadata import ExifEater
 from lib.utils import *
@@ -43,7 +44,7 @@ def get_source(gaiaID, client, cookies, headers, is_headless):
     tmprinter.out("Starting browser...")
 
     driverpath = get_driverpath()
-    driver = webdriver.Chrome(executable_path=driverpath, seleniumwire_options=options, chrome_options=chrome_options)
+    driver = webdriver.Chrome(executable_path=driverpath, seleniumwire_options=options, options=chrome_options)
     driver.header_overrides = headers
     wait = WebDriverWait(driver, 30)
 
@@ -72,7 +73,7 @@ def get_source(gaiaID, client, cookies, headers, is_headless):
     tmprinter.out("Got the albums overview !")
     no_photos_trigger = "reached the end"
     photos_trigger = " item"
-    body = driver.find_element_by_xpath("//body").text
+    body = driver.find_element(By.XPATH, "//body").text
     if no_photos_trigger in body:
         stats = "notfound"
     elif photos_trigger in body:
